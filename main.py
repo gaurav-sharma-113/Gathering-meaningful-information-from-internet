@@ -15,11 +15,8 @@ from modules.getResults import getHitsandMiss
 
 def getInfoFromInternet():
     entries = 0
-    matching_entries = 0
     hitsCT = 0
-    missCT = 0
     hitsS = 0
-    missS = 0
     nlp = spacy.load("en_core_web_sm")
     urlsCT = []
     urlsS = []
@@ -38,7 +35,7 @@ def getInfoFromInternet():
                 else:
                     stream = open(file_name, "rb")
 
-                hitsCT, hitsS, missCT, missS, urlsCT, urlsS, entries = getHitsandMiss(stream, hitsCT, hitsS, missCT, missS, urlsCT, urlsS, entries)
+                hitsCT, hitsS, urlsCT, urlsS, entries = getHitsandMiss(stream, hitsCT, hitsS, urlsCT, urlsS, entries)
     
                 
                 

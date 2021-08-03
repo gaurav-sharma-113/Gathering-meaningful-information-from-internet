@@ -1,17 +1,10 @@
 from warcio.archiveiterator import ArchiveIterator
-import re
-import requests
-import sys
-import pdb
-import spacy
-import csv
 from bs4 import BeautifulSoup
 
-import modules.nltkmodules
 from modules.summary import returnSummary
 from modules.textPreProcess import preProcessing
 
-def getHitsandMiss(stream, hitsCT, hitsS, missCT, missS, urlsCT, urlsS, entries):
+def getHitsandMiss(stream, hitsCT, hitsS, urlsCT, urlsS, entries):
     for record in ArchiveIterator(stream):
         if record.rec_type == "warcinfo":
             continue
@@ -37,20 +30,16 @@ def getHitsandMiss(stream, hitsCT, hitsS, missCT, missS, urlsCT, urlsS, entries)
                     hitsCT = hitsCT + 1
                     print("From Text: ", hitsCT, "/", entries)
                     urlsCT.append(record.rec_headers.get_header("WARC-Target-URI"))
-                else:
-                    missCT = missCT - 1 
 
                 # Checking from the Summary
                 if ("covid" in summary.lower() or "corona" in summary.lower()) and ("economy" in summary.lower() or "economic" in summary.lower()):
                     hitsS = hitsS + 1
                     print("From Summary: ", hitsS, "/", entries)
                     urlsS.append(record.rec_headers.get_header("WARC-Target-URI"))
-                else:
-                    missS = missS - 1 
             
                 if hitsCT > 1000 or hitsS > 1000:
-                    return hitsCT, hitsS, missCT, missS, urlsCT, urlsS, entries
+                    return hitsCT, hitsS, urlsCT, urlsS, entries
             except:
                 pass
     
-    return hitsCT, hitsS, missCT, missS, urlsCT, urlsS, entries
+    return hitsCT, hitsS, urlsCT, urlsS, entries
